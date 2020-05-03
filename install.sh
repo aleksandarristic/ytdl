@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install stuff
-apt update && apt -y upgrade && apt -y install python ffmpeg && pip install -U pip && pip install -U youtube-dl
+apt update && apt -y upgrade && apt -y install python ffmpeg wget && pip install -U pip && pip install -U youtube-dl
 
 # add update alias to bashrc
 echo "alias update='apt update && apt -y upgrade && pip install -U pip && pip install -U youtube-dl'" >> ~/.bashrc; 
@@ -9,16 +9,18 @@ echo "alias update='apt update && apt -y upgrade && pip install -U pip && pip in
 # setup termux storage
 termux-setup-storage
 
-# create dirs
-mkdir -p ~/.config/youtube-dl
-mkdir -p ~/bin
-mkdir -p /data/data/com.termux/files/home/storage/downloads/music
+# remove existing youtube-dl config if present
+# CAUTION: If you depend on this - don't run this line!
+rm -rf ~/.config/youtube-dl
 
-# setup config
-echo '-o "/data/data/com.termux/files/home/storage/downloads/music/%(title)s.%(ext)s" -x --audio-format mp3 -i' > ~/.config/youtube-dl/config
+# create bin directory
+mkdir -p ~/bin
 
 # setup url opener
 echo '#!/bin/bash' > ~/bin/termux-url-opener
 echo 'url=$1' >> ~/bin/termux-url-opener
-echo 'youtube-dl $url' >> ~/bin/termux-url-opener
+echo 'python ~/dloader.py $url' >> ~/bin/termux-url-opener
 chmod +x ~/bin/termux-url-opener
+
+# download the downloader
+curl https://raw.githubusercontent.com/aleksandarristic/ytdl/master/dloader.py -o ~/dloader.py
