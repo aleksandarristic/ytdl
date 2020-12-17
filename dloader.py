@@ -12,14 +12,14 @@ config = {
 		'message': 'Download Video to Downloads/video with YouTube-DL',
 		'command': 'youtube-dl -o "/data/data/com.termux/files/home/storage/downloads/video/%(title)s.%(ext)s" -i'
 	},
-	'd': {
-		'message': 'Download file to Downloads with Wget',
-		'command': 'wget -P /data/data/com.termux/files/home/storage/downloads/'
-	},
-	'r': {
-		'message': 'Download all recursively to Downloads with Wget',
-		'command': 'wget --recursive --no-parent -P /data/data/com.termux/files/home/storage/downloads/'
-	},
+#	'd': {
+#		'message': 'Download file to Downloads with Wget',
+#		'command': 'wget -P /data/data/com.termux/files/home/storage/downloads/'
+#	},
+#	'r': {
+#		'message': 'Download all recursively to Downloads with Wget',
+#		'command': 'wget --recursive --no-parent -P /data/data/com.termux/files/home/storage/downloads/'
+#	},
 	'q': {
 		'message': 'Quit - do nothing',
 		'command': None
@@ -62,9 +62,9 @@ current_path = os.getcwd()
 url = sys.argv[1]
 
 chooser.select()
-
+log = "2>&1 | tee /data/data/com.termux/files/home/storage/downloads/ytdl.log"
 if chooser.command() is not None:
-	command = '%s %s' % (chooser.command(), url)
+	command = '%s %s %s' % (chooser.command(), url, log)
 	os.system(command)
 
 print('Bye!')
